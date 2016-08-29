@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>无标题文档</title>
+<style>
+body{ background:#f9f9f9;}
+#menu{width:50px;height:50px; position:fixed;right:200px; bottom:200px; transition: 1s; }
+#menu_list{height:42px;width:42px; position:relative;margin:4px;}
+#menu_list img{ border-radius:21px; position:absolute;left:0;top:0; -webkit-transition:0.5s all ease;}
+#home{width:50px;height:50px;background:url(home.png) no-repeat; border-radius:25px; position:absolute; left:0;top:0; transition:1s;}
+</style>
+</head>
+<body>
+<div id="menu">
+	<div id="menu_list">
+    	<img src="prev.png" alt=""/>
+        <img src="open.png" alt="" />
+        <img src="clos.png" alt="" />
+        <img src="full.png" alt="" />
+        <img src="refresh.png" alt="" />
+    </div>
+	<div id="home"></div>
+</div>
+<script>
+window.onload = function(){
+	var Ohome=document.getElementById("home");
+	var Omenu = document.getElementById('menu')
+	var Aimg = document.getElementsByTagName('img')
+	var boff = true;
+	var iR = -150;
+ 	for(var i=0; i<Aimg.length;i++){
+ 		Aimg[i].onclick = function(){
+ 			this.style.transition = '0.3s';
+ 			this.style.WebkitTransform = 'scale(2) rotate(720deg)';
+ 			this.style.opacity = 0.1;
+ 			addEnd(this,End);
+ 		}
+ 	}
+
+ 	function End(){
+ 		this.style.transition = '0.3s';
+ 		this.style.opacity = '1';
+ 		this.style.WebkitTransform = 'scale(1) rotate(720deg)'
+ 		removeEnd(this,End);
+ 	}
+
+	Ohome.onclick = function(){
+		
+		if (boff) {
+			Ohome.style.WebkitTransform = 'rotate(720deg)';
+			for(var i = 0 ; i<Aimg.length ; i++){
+				var LT = getLT(iR,i*90/4);
+				Aimg[i].style.transition = '0.5s '+i*100+'ms';
+				Aimg[i].style.WebkitTransform = 'scale(1) rotate(720deg)';
+				Aimg[i].style.left = LT.L +'px';
+				Aimg[i].style.top = LT.T + 'px';
+			}
+		}else{
+			Ohome.style.WebkitTransform = 'rotate(0deg)';
+				for(var i = Aimg.length-1 ; i>-1 ; i--){
+				var LT = getLT(iR,i*90/4);
+				Aimg[i].style.transition = '0.5s '+i*100+'ms';
+				Aimg[i].style.WebkitTransform = 'scale(1) rotate(0deg)';
+				Aimg[i].style.left = 0 +'px';
+				Aimg[i].style.top = 0 + 'px';
+			}
+		}
+		boff = !boff;
+		
+	}
+
+	function getLT(iR,iDeg){
+		return {
+			L : Math.round(iR*Math.sin(Math.PI*iDeg/180)),
+			T : Math.round(iR*Math.cos(Math.PI*iDeg/180))
+		}
+	}
+
+		function addEnd(obj,fn){
+		obj.addEventListener('WebkitTransitionEnd',fn,false);
+		obj.addEventListener('transitionend',fn,false);
+		}
+		function removeEnd(obj,fn){
+			obj.removeEventListener('WebkitTransitionEnd',fn,false);
+			obj.removeEventListener('transitionend',fn,false);
+		}
+}
+
+</script>
+
+</body>
+</html>
